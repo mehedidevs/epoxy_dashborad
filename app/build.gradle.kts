@@ -55,11 +55,11 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("androidx.fragment:fragment-ktx:1.8.3")
+    implementation(libs.androidx.fragment.ktx)
 
-    implementation("com.airbnb.android:epoxy:5.1.4")
-    kapt("com.airbnb.android:epoxy-processor:5.1.4")
-    implementation("com.airbnb.android:epoxy-databinding:3.11.0")
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    implementation("com.google.code.gson:gson:2.11.0")
+    implementation(libs.epoxy)
+    kapt(libs.epoxy.processor)
+    implementation(libs.epoxy.databinding)
+    implementation(libs.glide)
+    implementation(libs.gson)
 }
