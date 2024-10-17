@@ -1,0 +1,61 @@
+{
+  "productId": "67890",
+  "productName": "Modern Sofa",
+  "filters": [
+    {
+      "filterType": "MULTI_SELECT",
+      "filterName": "Color",
+      "options": [
+        { "id": "1", "label": "Red" },
+        { "id": "2", "label": "Blue" },
+        { "id": "3", "label": "Green" }
+      ]
+    },
+    {
+      "filterType": "PRICE_RANGE",
+      "filterName": "Price",
+      "minValue": 300,
+      "maxValue": 1000
+    },
+    {
+      "filterType": "SINGLE_SELECT",
+      "filterName": "Material",
+      "options": [
+        { "id": "1", "label": "Leather" },
+        { "id": "2", "label": "Fabric" }
+      ]
+    },
+    {
+      "filterType": "MULTI_COLOR_SELECT",
+      "filterName": "Available Patterns",
+      "options": [
+        { "id": "1", "label": "Stripes", "colorCode": "#FF5733" },
+        { "id": "2", "label": "Polka Dots", "colorCode": "#33FF57" },
+        { "id": "3", "label": "Solid", "colorCode": "#3357FF" }
+      ]
+    },
+    {
+      "filterType": "SIZE_RANGE",
+      "filterName": "Dimensions",
+      "minValue": "3 ft",
+      "maxValue": "6 ft"
+    },
+    {
+      "filterType": "SINGLE_COLOR_SELECT",
+      "filterName": "Frame Color",
+      "options": [
+        { "id": "1", "label": "Black", "colorCode": "#000000" },
+        { "id": "2", "label": "White", "colorCode": "#FFFFFF" }
+      ]
+    },
+    {
+      "filterType": "MULTI_SELECT_TAGS",
+      "filterName": "Special Features",
+      "options": [
+        { "id": "1", "label": "Waterproof" },
+        { "id": "2", "label": "Scratch Resistant" },
+        { "id": "3", "label": "Fireproof" }
+      ]
+    }
+  ]
+}
