@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Epoxy Dashboard"
 include(":app")
- 
+include(":filter")
