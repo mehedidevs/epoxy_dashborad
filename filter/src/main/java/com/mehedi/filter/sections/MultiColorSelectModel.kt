@@ -13,15 +13,20 @@ import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.mehedi.filter.ColorOption
+import com.mehedi.filter.MultiColorSelectFilter
 import com.mehedi.filter.R
 import com.mehedi.filter.SingleColorSelectFilter
+import com.mehedi.filter.databinding.ItemMultiColorSelectBinding
 import com.mehedi.filter.databinding.ItemSingleColorSelectBinding
 
 
-class SingleColorSelectModel(
-    var filter: SingleColorSelectFilter,
-    val onSelectionChanged: (ColorOption) -> Unit
-) : EpoxyModelWithHolder<SingleColorSelectModel.Holder>() {
+class MultiColorSelectModel(
+    var filter: MultiColorSelectFilter,
+    val onSelectionChanged: (List<ColorOption>) -> Unit
+) : EpoxyModelWithHolder<MultiColorSelectModel.Holder>() {
+
+    // This list will keep track of the selected colors
+    private val selectedColors = mutableListOf<ColorOption>()
 
     override fun bind(holder: Holder) {
         // Set the filter title
@@ -48,7 +53,7 @@ class SingleColorSelectModel(
                 background = drawable
 
                 // If the color option is selected, add a checkmark icon
-                if (filter.selectedOption?.id == colorOption.id) {
+                if (selectedColors.contains(colorOption)) {
                     val checkIcon = ImageView(context).apply {
                         layoutParams = FrameLayout.LayoutParams(40, 40).apply {
                             gravity = Gravity.CENTER
@@ -61,9 +66,13 @@ class SingleColorSelectModel(
 
                 // Handle click event to change selection
                 setOnClickListener {
-                    // Update the selected option in the filter
-                    filter = filter.copy(selectedOption = colorOption)
-                    onSelectionChanged(colorOption) // Trigger callback
+                    // Toggle the selection: add or remove from the list
+                    if (selectedColors.contains(colorOption)) {
+                        selectedColors.remove(colorOption)
+                    } else {
+                        selectedColors.add(colorOption)
+                    }
+                    onSelectionChanged(selectedColors) // Trigger callback with the new list
                     // Rebuild the model to reflect the new selection
                     holder.binding.flColorOptions.removeAllViews()
                     bind(holder) // Rebind the holder to refresh the UI
@@ -74,63 +83,17 @@ class SingleColorSelectModel(
             holder.binding.flColorOptions.addView(colorView)
         }
     }
-
-
-  /*  override fun bind(holder: Holder) {
-        // Set the filter title
-        holder.binding.tvFilterTitle.text = filter.filterName
-
-        // Clear any previous views from the FlexboxLayout
-        holder.binding.flColorOptions.removeAllViews()
-
-        // Populate the FlexboxLayout with circular color options
-        filter.options.forEach { colorOption ->
-            val colorView = View(holder.binding.root.context).apply {
-                layoutParams = LinearLayout.LayoutParams(80, 80).apply {
-                    setMargins(8, 8, 8, 8)
-                }
-
-                // Create a GradientDrawable for the circular color option
-                val drawable = GradientDrawable().apply {
-                    shape = GradientDrawable.OVAL
-                    setColor(Color.parseColor(colorOption.colorCode)) // Set the color
-
-                    // Add stroke for the selected color
-                    if (filter.selectedOption?.id == colorOption.id) {
-                        setStroke(6, Color.BLACK) // Set a red border if selected
-                    }
-                }
-
-                // Set the drawable as the background of the colorView
-                background = drawable
-
-                // Handle click event to change selection
-                setOnClickListener {
-                    // Update the selected option in the filter
-                    filter = filter.copy(selectedOption = colorOption)
-                    onSelectionChanged(colorOption) // Trigger callback
-                    // Rebuild the model to reflect the new selection
-                    holder.binding.flColorOptions.removeAllViews()
-                    bind(holder) // Rebind the holder to refresh the UI
-                }
-            }
-
-            // Add the colorView to the FlexboxLayout
-            holder.binding.flColorOptions.addView(colorView)
-        }
-    }*/
-
 
 
     // Holder class with ViewBinding
     class Holder : EpoxyHolder() {
-        lateinit var binding: ItemSingleColorSelectBinding
+        lateinit var binding: ItemMultiColorSelectBinding
 
         override fun bindView(itemView: View) {
-            binding = ItemSingleColorSelectBinding.bind(itemView)
+            binding = ItemMultiColorSelectBinding.bind(itemView)
         }
     }
 
-    override fun getDefaultLayout() = R.layout.item_single_color_select
+    override fun getDefaultLayout() = R.layout.item_multi_color_select
     override fun createNewHolder(parent: ViewParent) = Holder()
 }

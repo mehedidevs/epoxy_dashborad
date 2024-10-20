@@ -35,7 +35,8 @@ data class SingleSelectFilter(
 data class MultiColorSelectFilter(
     override val filterType: String,
     override val filterName: String,
-    val options: List<ColorOption>
+    val options: List<ColorOption>,
+    val selectedOptions: List<ColorOption> = emptyList()
 ) : Filter()
 
 data class SizeRangeFilter(
@@ -55,8 +56,16 @@ data class SingleColorSelectFilter(
 data class MultiSelectTagsFilter(
     override val filterType: String,
     override val filterName: String,
-    val options: List<Option>
+    val options: List<Option>,
+    val selectedOptions: List<Option> = emptyList()
 ) : Filter()
+data class SingleSelectTagsFilter(
+    override val filterType: String,
+    override val filterName: String,
+    val options: List<Option>,
+    val selectedOption: Option? = null // Track the currently selected tag
+) : Filter()
+
 
 data class Option(val id: String, val label: String)
 data class ColorOption(val id: String, val label: String, val colorCode: String)

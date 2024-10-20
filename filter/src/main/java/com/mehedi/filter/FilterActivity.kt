@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.mehedi.filter.databinding.ActivityFilterBinding
+import com.mehedi.filter.sections.SingleSelectTagsModel
 
 // Usage in Activity or Fragment
 class FilterActivity : AppCompatActivity() {
@@ -102,11 +103,13 @@ class FilterActivity : AppCompatActivity() {
                     }
 
                     is MultiSelectTagsFilter -> {
-                        val selectedIds =
-                            filterSelections[filter.filterName] as? List<String> ?: emptyList()
-                        if (selectedIds.isNotEmpty()) {
+                        val selectedTags =
+                            filterSelections[filter.filterName] as? List<Option> ?: emptyList()
+
+                        if (selectedTags.isNotEmpty()) {
                             filter.copy(
-                                options = filter.options.filter { it.id in selectedIds }
+                                options = filter.options.filter { it in selectedTags }, // Filter out the selected tags
+                                selectedOptions = selectedTags // Preserve the selected options
                             )
                         } else {
                             null // Set to null if no selection was made
@@ -134,6 +137,10 @@ class FilterActivity : AppCompatActivity() {
         )
 
         val singleSelectOptions = listOf(
+            Option(id = "3", label = "Option 3"),
+            Option(id = "4", label = "Option 4")
+        )
+        val singleTagSelectOptions = listOf(
             Option(id = "3", label = "Option 3"),
             Option(id = "4", label = "Option 4")
         )
@@ -189,6 +196,11 @@ class FilterActivity : AppCompatActivity() {
             filterName = "Select Multiple Tags",
             options = multiSelectOptions
         )
+        val singleSelectTagsFilter = SingleSelectTagsFilter(
+            filterType = "SINGLE_SELECT_TAGS",
+            filterName = "Select Multiple Tags",
+            options = singleTagSelectOptions
+        )
 
         // Returning a mock FilterResponse object with the filters
         return FilterResponse(
@@ -201,7 +213,8 @@ class FilterActivity : AppCompatActivity() {
                 multiColorSelectFilter,
                 sizeRangeFilter,
                 singleColorSelectFilter,
-                multiSelectTagsFilter
+                multiSelectTagsFilter,
+                singleSelectTagsFilter
             )
         )
     }
