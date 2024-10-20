@@ -11,7 +11,9 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.mehedi.filter.Option
 import com.mehedi.filter.R
 import com.mehedi.filter.SingleSelectTagsFilter
+import com.mehedi.filter.collapse
 import com.mehedi.filter.databinding.ItemSingleSelectTagsBinding
+import com.mehedi.filter.expand
 
 class SingleSelectTagsModel(
     var filter: SingleSelectTagsFilter, // Ensure filter can be updated
@@ -19,33 +21,29 @@ class SingleSelectTagsModel(
 ) : EpoxyModelWithHolder<SingleSelectTagsModel.Holder>() {
 
 
-    // To track the expanded/collapsed state
     private var isExpanded = false
 
     override fun bind(holder: Holder) {
         // Set the filter title
         holder.binding.tvFilterTitle.text = filter.filterName
 
-        // Set initial state as collapsed (height = 0)
-        holder.binding.flTagsOptions.visibility = View.VISIBLE // Visible but with height = 0
+        // Initially collapse or expand the layout based on the state
         if (!isExpanded) {
-            collapse(holder.binding.flTagsOptions, animate = false)
+            holder.binding.flTagsOptions.collapse()
+        } else {
+            holder.binding.flTagsOptions.expand()
+            populateTagOptions(holder) // Populate tag options when expanded
         }
 
         // Handle click event to toggle visibility with animation
         holder.binding.tvFilterTitle.setOnClickListener {
             if (isExpanded) {
-                collapse(holder.binding.flTagsOptions, animate = true)
+                holder.binding.flTagsOptions.collapse()
             } else {
-                expand(holder.binding.flTagsOptions, animate = true)
-                populateTagOptions(holder) // Populate tag options when expanded
+                holder.binding.flTagsOptions.expand()
+                populateTagOptions(holder) // Populate tag options when expanding
             }
             isExpanded = !isExpanded // Toggle state
-        }
-
-        // Populate the tag options only if expanded
-        if (isExpanded) {
-            populateTagOptions(holder)
         }
     }
 
@@ -76,56 +74,12 @@ class SingleSelectTagsModel(
                     filter = filter.copy(selectedOption = tagOption)
                     onSelectionChanged(tagOption) // Trigger callback with the selected tag
                     // Rebuild the model to reflect the new selection
-                    holder.binding.flTagsOptions.removeAllViews()
                     populateTagOptions(holder) // Rebuild tag options
                 }
             }
 
             // Add the tagView to the FlexboxLayout
             holder.binding.flTagsOptions.addView(tagView)
-        }
-    }
-
-    // Animation: Expand the view from height 0 to its measured height
-    private fun expand(view: View, animate: Boolean) {
-        view.measure(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-        val targetHeight = view.measuredHeight
-
-        if (animate) {
-            val animator = ValueAnimator.ofInt(0, targetHeight).apply {
-                duration = 300 // Animation duration
-                addUpdateListener { animation ->
-                    val value = animation.animatedValue as Int
-                    view.layoutParams.height = value
-                    view.requestLayout()
-                }
-            }
-            animator.start()
-        } else {
-            // Set to full height without animation
-            view.layoutParams.height = targetHeight
-            view.requestLayout()
-        }
-    }
-
-    // Animation: Collapse the view from its current height to 0
-    private fun collapse(view: View, animate: Boolean) {
-        val initialHeight = view.measuredHeight
-
-        if (animate) {
-            val animator = ValueAnimator.ofInt(initialHeight, 0).apply {
-                duration = 300 // Animation duration
-                addUpdateListener { animation ->
-                    val value = animation.animatedValue as Int
-                    view.layoutParams.height = value
-                    view.requestLayout()
-                }
-            }
-            animator.start()
-        } else {
-            // Collapse immediately without animation
-            view.layoutParams.height = 0
-            view.requestLayout()
         }
     }
 

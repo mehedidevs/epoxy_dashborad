@@ -8,17 +8,40 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.mehedi.filter.Option
 import com.mehedi.filter.R
 import com.mehedi.filter.SingleSelectFilter
+import com.mehedi.filter.collapse
 import com.mehedi.filter.databinding.ItemSingleSelectBinding
+import com.mehedi.filter.expand
 
 class SingleSelectModel(
     val filter: SingleSelectFilter,
     val onSelectionChanged: (Option) -> Unit // Change to pass `Option` instead of `String`
 ) : EpoxyModelWithHolder<SingleSelectModel.Holder>() {
-
+    private var isExpanded = false
     override fun bind(holder: Holder) {
         // Set filter title
         holder.binding.tvFilterTitle.text = filter.filterName
+        // Initially collapse or expand the layout based on the state
+        if (!isExpanded) {
+            holder.binding.rgOptions.collapse()
+        } else {
+            holder.binding.rgOptions.expand()
+            populateOptions(holder) // Populate tag options when expanded
+        }
 
+        // Handle click event to toggle visibility with animation
+        holder.binding.tvFilterTitle.setOnClickListener {
+            if (isExpanded) {
+                holder.binding.rgOptions.collapse()
+            } else {
+                holder.binding.rgOptions.expand()
+                populateOptions(holder) // Populate tag options when expanding
+            }
+            isExpanded = !isExpanded // Toggle state
+        }
+
+    }
+
+    private fun populateOptions(holder: Holder) {
         // Clear any previous options from the RadioGroup
         holder.binding.rgOptions.removeAllViews()
 
