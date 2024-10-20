@@ -10,7 +10,9 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import com.mehedi.filter.MultiSelectTagsFilter
 import com.mehedi.filter.Option
 import com.mehedi.filter.R
+import com.mehedi.filter.collapse
 import com.mehedi.filter.databinding.ItemMultiSelectTagsBinding
+import com.mehedi.filter.expand
 
 
 class MultiSelectTagsModel(
@@ -20,11 +22,34 @@ class MultiSelectTagsModel(
 
     // This list will keep track of the selected tags
     private val selectedTags = mutableListOf<Option>()
-
+    private var isExpanded = false
     override fun bind(holder: Holder) {
         // Set the filter title
         holder.binding.tvFilterTitle.text = filter.filterName
 
+        // Initially collapse or expand the layout based on the state
+        if (!isExpanded) {
+            holder.binding.flTagsOptions.collapse()
+        } else {
+            holder.binding.flTagsOptions.expand()
+            populateOptions(holder) // Populate tag options when expanded
+        }
+
+        // Handle click event to toggle visibility with animation
+        holder.binding.tvFilterTitle.setOnClickListener {
+            if (isExpanded) {
+                holder.binding.flTagsOptions.collapse()
+            } else {
+                holder.binding.flTagsOptions.expand()
+                populateOptions(holder) // Populate tag options when expanding
+            }
+            isExpanded = !isExpanded // Toggle state
+        }
+
+
+    }
+
+    private fun populateOptions(holder: Holder) {
         // Clear any previous views from the FlexboxLayout
         holder.binding.flTagsOptions.removeAllViews()
 

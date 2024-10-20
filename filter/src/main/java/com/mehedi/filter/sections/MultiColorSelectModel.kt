@@ -16,8 +16,10 @@ import com.mehedi.filter.ColorOption
 import com.mehedi.filter.MultiColorSelectFilter
 import com.mehedi.filter.R
 import com.mehedi.filter.SingleColorSelectFilter
+import com.mehedi.filter.collapse
 import com.mehedi.filter.databinding.ItemMultiColorSelectBinding
 import com.mehedi.filter.databinding.ItemSingleColorSelectBinding
+import com.mehedi.filter.expand
 
 
 class MultiColorSelectModel(
@@ -27,11 +29,35 @@ class MultiColorSelectModel(
 
     // This list will keep track of the selected colors
     private val selectedColors = mutableListOf<ColorOption>()
+    private var isExpanded = false
 
     override fun bind(holder: Holder) {
         // Set the filter title
         holder.binding.tvFilterTitle.text = filter.filterName
 
+        // Initially collapse or expand the layout based on the state
+        if (!isExpanded) {
+            holder.binding.flColorOptions.collapse()
+        } else {
+            holder.binding.flColorOptions.expand()
+            populateOptions(holder) // Populate tag options when expanded
+        }
+
+        // Handle click event to toggle visibility with animation
+        holder.binding.tvFilterTitle.setOnClickListener {
+            if (isExpanded) {
+                holder.binding.flColorOptions.collapse()
+            } else {
+                holder.binding.flColorOptions.expand()
+                populateOptions(holder) // Populate tag options when expanding
+            }
+            isExpanded = !isExpanded // Toggle state
+        }
+
+
+    }
+
+    private fun populateOptions(holder: Holder) {
         // Clear any previous views from the FlexboxLayout
         holder.binding.flColorOptions.removeAllViews()
 

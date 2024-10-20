@@ -60,4 +60,5 @@ dependencies {
     implementation(libs.gson)
 
     implementation (libs.flexbox)
+    implementation ("com.airbnb.android:lottie:6.3.0")
 }

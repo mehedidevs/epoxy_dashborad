@@ -198,7 +198,7 @@ class FilterActivity : AppCompatActivity() {
         )
         val singleSelectTagsFilter = SingleSelectTagsFilter(
             filterType = "SINGLE_SELECT_TAGS",
-            filterName = "Select Multiple Tags",
+            filterName = "Select Single Tags",
             options = singleTagSelectOptions
         )
 
@@ -213,8 +213,9 @@ class FilterActivity : AppCompatActivity() {
                 multiColorSelectFilter,
                 sizeRangeFilter,
                 singleColorSelectFilter,
+                singleSelectTagsFilter,
                 multiSelectTagsFilter,
-                singleSelectTagsFilter
+
             )
         )
     }

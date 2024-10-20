@@ -27,6 +27,10 @@ class SingleSelectTagsModel(
         // Set the filter title
         holder.binding.tvFilterTitle.text = filter.filterName
 
+        populateOptions(holder)
+    }
+
+    private fun populateOptions(holder: Holder) {
         // Initially collapse or expand the layout based on the state
         if (!isExpanded) {
             holder.binding.flTagsOptions.collapse()
