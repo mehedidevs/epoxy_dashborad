@@ -58,4 +58,6 @@ dependencies {
     implementation(libs.epoxy.databinding)
     implementation(libs.glide)
     implementation(libs.gson)
+
+    implementation (libs.flexbox)
 }

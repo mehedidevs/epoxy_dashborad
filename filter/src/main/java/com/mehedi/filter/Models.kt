@@ -28,7 +28,8 @@ data class PriceRangeFilter(
 data class SingleSelectFilter(
     override val filterType: String,
     override val filterName: String,
-    val options: List<Option>
+    val options: List<Option>,
+    val selectedOption: Option?
 ) : Filter()
 
 data class MultiColorSelectFilter(
@@ -47,7 +48,8 @@ data class SizeRangeFilter(
 data class SingleColorSelectFilter(
     override val filterType: String,
     override val filterName: String,
-    val options: List<ColorOption>
+    val options: List<ColorOption>,
+    val selectedOption: ColorOption?
 ) : Filter()
 
 data class MultiSelectTagsFilter(
